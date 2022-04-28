@@ -1,0 +1,358 @@
+---
+title: "Final"
+output: html_notebook
+---
+
+
+
+# Instructions
+
+- Relax, you got this.
+- Complete each task in this Markdown notebook.
+- I have included code blocks as needed.
+- Some tasks ask you interpretation questions. The goal of these tasks
+  is to evaluate your critical thinking skills as they pertain to
+  data. You should not need any additional code to complete these
+  interpretive tasks.
+- I recommend completing the final in the notebook before answering any 
+  questions in Canvas.
+- Many tasks build upon previous tasks. If you get completely stuck on
+  a question, tell me. You won't get any credit for the task I help
+  you with, but at least you have a shot at getting credit on the
+  tasks which depend on that task.
+- This final was brought to you by:
+    - Tom Petty's 1991 album, "Into the Great Wide Open".
+    - Billie Joe Armstrong album, "No Fun Mondays"
+
+
+
+# Setup
+
+Run this code chunk to load libraries and import data.
+
+```{r setup, include=FALSE}
+library(rpart)
+library(rpart.plot)
+library(tidyverse)
+options(scipen = 999)
+
+insurance <- read_csv("data/insurance.csv")
+diabetes <- read_csv("data/pima-indians-diabetes.csv")
+```
+
+
+
+# Question Set 1: Insurance
+
+These questions will assess your ability to manipulate data, do some basic plotting and linear regression.
+
+## Data
+
+As you all know, the cost of healthcare continues to increase. The `insurance` data presents you with an opportunity to explore factors which may impact the cost of healthcare insurance. There are 1,338 insured members in this dataset. The columns are mostly self-explanatory, but definitions have been provided below.
+
+```{r}
+insurance
+```
+
+Columns:
+
+- age: The age of the insured member.
+- sex: The gender of the insured member.
+- bmi: The current body mass index of the insured member.
+- children: The number of children the insured member is responsible for.
+- smoker: If yes, the insured member smokes.
+- region: The region the insured member lives in.
+- charges: The annual cost of insuring the member.
+
+Our first few tasks will be to filter, group, and calculate summary statistics (mean, sum, count) on this data. We will then build a linear model or two.
+
+
+## Task 01: Count of males
+
+- Question: How many males are in our data set?
+- Answer: 
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+
+## Task 02: Charges by region
+
+- Question: Which region has the highest average charges?
+- Answer: 
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+
+## Task 03: Box plot or violin
+
+Use ggplot to create a box plot of insurance charges by region.
+    - Place `region` on the x axis and `charges` on the y axis.
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+Use ggplot to create a violin plot of insurance charges by region.
+    - Place `region` on the x axis and `charges` on the y axis.
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+- Question: Which plot, the violin plot of the box plot best helped you understand the data and why?
+    - Upload your preferred plot and tell me why you prefer it.
+    - This isn't a trick question. You can get full credit either way. I'm looking for your logic/explanation.
+- Answer: 
+
+## Task 04: Which is a better predictor?
+
+- Question: Using any approach/methodology you prefer, assess insurance charges by smoker status. Then, compare this to insurance charges by region (Task 03) and tell me which is more strongly correlated with insurance charges.
+    - Hint: You are looking for the feature/column which can predict members with high insurance costs.
+- Answer: 
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+
+## Task 05: Charges by age
+
+Draw a scatter plot using age as the x-axis and charges as the y-axis.
+
+- Question: You should see that costs increase for older members. You should also see some number of "bands" or "groups" of data. How many distinct groups do you see?
+- Answer: 
+    - Hint: The right answer is more than 1 and less than 5.
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+
+## Task 06: Explain the lowest band.
+
+- Question: Which column "best explains" the lowest band in the scatter plot from Task 04?
+    - Options: region, sex, smoker
+    - Alter the aesthetic (aes) in your Task 04 plot to include color.
+    - In other words: aes(x = something, y = else, color = region)
+    - After looking at three plots (one for each option listed above), tell me which plot/column best explains why insured members are in the lowest band.
+    - In other words, are the lowest cost members all living in a specific region or two or all male?
+- Answer: 
+    - In canvas, tell me which column you think "best explains" the lowest band.
+    - No, it will not explain the higher bands.
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+
+## Task 07: Charges by BMI
+
+Draw a scatter plot using bmi as the x-axis and charges as the y-axis. Stratify this by smoker status by setting the color aesthetic.
+    - You should see two very distinct groups.
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+- Question: I hope by now you have figured out that smokers cost more than non-smokers. And as BMI increases, the impact of smoking increases dramatically. Now build a linear regression using `lm` to calculate the relationship between BMI and charges for a smoker.
+    - Hint: Use filter or you will get the wrong answer.
+- Answer: 
+    - In canvas, tell me the Estimate for bmi (which is the same as the slope of the relationship).
+    - This is the number that tells us how much charges increase for every unit increase in BMI. So, if the estimate is 100, then on average, a member with a BMI of 25 is $100 dollars more expensive than a member with a BMI of 24.
+    - And no, the answer is not 100.
+
+```{r}
+## YOUR CODE HERE!!!
+
+## HINT: Use the filter function.
+## Compare your estimate (slope) to what your eyes see in your plot.
+## Does your answer make sense? If no, consider using filter.
+
+```
+
+
+
+# Question Set 2: Diabetes
+
+This dataset is originally published by the National Institute of Diabetes and Digestive and Kidney Diseases. Today, we will explore risk of having diabetes, based on certain diagnostic measurements included in the dataset. Our data comes from a larger data set. To simplify our task, the patients in today's dataset are all females, 21 years of age or older, and of Pima Indian heritage. Hence, this dataset is often referred to as the Pima Indians Diabetes dataset.
+
+Acknowledgements:
+
+Smith, J.W., Everhart, J.E., Dickson, W.C., Knowler, W.C., & Johannes, R.S. (1988). Using the ADAP learning algorithm to forecast the onset of diabetes mellitus. In Proceedings of the Symposium on Computer Applications and Medical Care (pp. 261--265). IEEE Computer Society Press.
+
+## Data
+
+```{r}
+diabetes
+```
+
+Columns:
+
+- pregnancies: Number of times pregnant
+- glucose: Plasma glucose concentration a 2 hours in an oral glucose tolerance test
+- blood_pressure: Diastolic blood pressure (mm Hg)
+- skin_thinkness: Triceps skin fold thickness (mm)
+- insulin: 2-Hour serum insulin (mu U/ml)
+- bmi: Body Mass Index
+- diabetes_pedigree_function: A mathematical model which includes information about diabetes history in close family members. A higher score means a higher risk because more family members have diabetes.
+- age: Age in years
+- diabetes: 
+
+
+## Task 08: Percentage with diabetes
+
+- Question: What percentage of patients in the diabetes dataset have diabetes?
+    - Remember this percentage is the RISK.
+- Answer: 
+
+```{r}
+## YOUR CODE HERE!!!
+
+```
+
+Now we will try to actually model diabetes.
+
+## Task 09: Logistic Regression: Glucose v Age
+
+Unlike the models we developed in class, there aren't any categoricals like gender in this dataset. That said, we can still model how higher glucose can be used to predict diabetes.
+
+- Question: Based on the three models below, which model best explains risk of developing diabetes?
+    - Think about Residual deviance.
+- Answer: 
+
+```{r}
+## Glucose
+glm_glucose <- glm(has_diabetes~glucose, family = binomial, data = diabetes)
+summary(glm_glucose)
+```
+
+```{r}
+## Age
+glm_age <- glm(has_diabetes~age, family = binomial, data = diabetes)
+summary(glm_age)
+```
+
+```{r}
+## BMI
+glm_bmi <- glm(has_diabetes~bmi, family = binomial, data = diabetes)
+summary(glm_bmi)
+```
+
+
+## Task 10: Accuracy
+
+Using matrix below, calculate the accuracy of the glucose model.
+
+```{r}
+## Confusion Matrix - Glucose
+confusion_data <- diabetes %>% select(has_diabetes)
+confusion_data$predicted_odds <-
+  predict(glm_glucose, newdata = diabetes %>% select(-has_diabetes)) %>% exp()
+confusion_data <-
+  confusion_data %>%
+  mutate(
+    predicted_diabetes = case_when(predicted_odds > 1~1,TRUE~0),
+    did_not_predict_diabetes = case_when(predicted_odds <= 1~1,TRUE~0),
+  )
+
+confusion_data %>%
+  group_by(has_diabetes) %>%
+  summarize(
+    predicted_diabetes = sum(predicted_diabetes),
+    did_not_predict_diabetes = sum(did_not_predict_diabetes),
+    )
+```
+
+Using the confusion matrix below, calculate the accuracy of the BMI model.
+
+```{r}
+## Confusion Matrix - BMI
+confusion_data <- diabetes %>% select(has_diabetes)
+confusion_data$predicted_odds <-
+  predict(glm_bmi, newdata = diabetes %>% select(-has_diabetes)) %>% exp()
+confusion_data <-
+  confusion_data %>%
+  mutate(
+    predicted_diabetes = case_when(predicted_odds > 1~1,TRUE~0),
+    did_not_predict_diabetes = case_when(predicted_odds <= 1~1,TRUE~0),
+  )
+
+confusion_data %>%
+  group_by(has_diabetes) %>%
+  summarize(
+    predicted_diabetes = sum(predicted_diabetes),
+    did_not_predict_diabetes = sum(did_not_predict_diabetes),
+    )
+```
+
+- Question: Which model has the higher accuracy? What is the accuracy of the more accurate model?
+- Answer: 
+
+
+## Task 11: Decision Tree Example
+
+- Question: What would the following model, which uses glucose and bmi predict for a patient with glucose of 139 and a bmi of 27?
+- Answer: Does not predict diabetes
+    - Hint: Your answer choices are:
+        - Predicts diabetes
+        - Does not predict diabetes
+
+```{r}
+tree_glucose_bmi <- rpart(
+  has_diabetes~glucose+bmi,
+  data = diabetes,
+  method = "class"
+)
+rpart.plot(tree_glucose)
+```
+
+
+## Task 11: Of Trees and Forests
+
+- Question: What is a known problem of decision trees and what modeling technique did we discuss to control this problem?
+    - Options to consider: underfitting, introducing bias, overfitting
+- Answer: 
+
+You do not need any code to answer this question.
+
+
+
+
+# BTN Questions
+
+The following questions do not need to be answered in RStudio. I included them here for completeness' sake.
+
+
+## Task 13: Replicability or Reproducibility FAIL
+
+- Question: Years ago, a colleague of mine led a project in Alaska on ways to reduce 30-day prison recidivism. His work was excellent, was accepted by the State, and was published. The following year, he was badly injured in a motorcycling accident and suffered a profound traumatic brain injury. The following year, the State of Alaska asked my employer to update our report, using his analysis. I had access to his old data files and code. We had all of the data, and we reviewed as much of his code as we could find. However, we were never able to duplicate some of his calculations from the original report and these were removed from the update, which upset the client. Is this best described as an example of the reproducibility or replicability crisis in data science?
+- Answer: 
+
+
+## Task 14: Choose your own adventure
+
+Choose one of the following questions to answer in Canvas:
+
+- Why do you think it is so hard to replicate published research results?
+- Should ACPHS develop a machine-learning model able to predict which students were most likely to graduate and then use that model to decide who to admit to our school? (And why?)
+- Should the US introduce legislation similar to the EU's GPDR? Why or why not?
+    - https://en.wikipedia.org/wiki/General_Data_Protection_Regulation
+
+## Task 15: What would you like to learn more about?
+
+- Question: Between what we've done in class and what we've done outside of class, we've covered a lot of ground. Tell me something you've learned this semester that you would like to learn more about.
+- Answer:
+
+I use this to develop new ideas for this class and give feedback to the school. There's not really a wrong answer.
